@@ -19,10 +19,9 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
 
+    //declare view elements
     TextView textViewTitle;
     TextView textViewError;
 
@@ -31,16 +30,14 @@ public class MainActivity extends AppCompatActivity {
     Button buttonDownload;
     Button buttonNext;
 
+    //blanks views used to display colors
     View color1;
     View color2;
     View color3;
     View color4;
     View color5;
 
-    ArrayList<Palette> palettes;
-    Palette currentPalette;
-    String[] currentColors;
-    int currentIndex;
+    PaletteViewModel paletteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +59,14 @@ public class MainActivity extends AppCompatActivity {
         color4 = findViewById(R.id.color4);
         color5 = findViewById(R.id.color5);
 
-        //initializes variables
-        palettes = new ArrayList<Palette>();
-        currentColors = new String[5];
-        //current index is set to -1.
-        //We don't have any palettes as of launching the app, so when we get the first palette, the index is incremented to 0
-        currentIndex = -1;
+        paletteViewModel = new PaletteViewModel();
 
         //sets up button listeners
         buttonPalettes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getPaletteAPI();
+                buttonNext.setVisibility(View.INVISIBLE);
             }
         });
         buttonNext.setOnClickListener(new View.OnClickListener() {
@@ -122,19 +115,12 @@ public class MainActivity extends AppCompatActivity {
                             // implementation 'com.google.code.gson:gson:2.8.6'
                             Palette newPalette = gson.fromJson(jsonPalette, Palette.class);
                             //adds the new palette to the list of palettes
-                            palettes.add(newPalette);
-                            //sets the current index to the last item in the palette list
-                            currentIndex = palettes.size()-1;
-                            //checks if we have as least 1 palettes in our list
-                            if (currentIndex > 0)
+                            paletteViewModel.addPalette(newPalette);
+                            setPaletteView(newPalette);
+                            if (paletteViewModel.isPreviousPalette())
                             {
-                                //makes the previous button invisible
                                 buttonPrevious.setVisibility(View.VISIBLE);
                             }
-                            //makes the next button invisible
-                            buttonNext.setVisibility(View.INVISIBLE);
-                            //sets up palette view
-                            setPaletteView();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -144,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        textViewError.setText("ERROR Response: " + error.toString());
+                        //textViewError.setText("ERROR Response: " + error.toString());
                     }
                 });
 
@@ -157,78 +143,58 @@ public class MainActivity extends AppCompatActivity {
     private void downloadPalette()
     {
         //protocol must be HTTPS in order to work on Android
-        String url = currentPalette.imageUrl.replace("http", "https");
+        String url = paletteViewModel.getCurrentPalette().imageUrl.replace("http", "https");
     }
 
     //Displays the previous palette in the list
     private void previousPalette()
     {
-        //Buttons are not disabled, only invisible, so we check to see if there is a previous item in the list of palettes
-        if (currentIndex > 0)
+        //checks if there is a previous palette
+        if (paletteViewModel.isPreviousPalette())
         {
-            //decrements the current index
-            currentIndex--;
-            //sets current palette
-            currentPalette = palettes.get(currentIndex);
-            //makes the next button visible
+            //sets up palette view with the previous palette
+            setPaletteView(paletteViewModel.previousPalette());
+            //sets the next button to visible
             buttonNext.setVisibility(View.VISIBLE);
-            //checks to see if there is a previous item in the list
-            if (currentIndex == 0)
+            //checks again if there is a previous palette. If not, sets the previous button to invisible
+            if (!paletteViewModel.isPreviousPalette())
             {
-                //makes the previous button invisible if the current palette is the last item in the list
                 buttonPrevious.setVisibility(View.INVISIBLE);
             }
-            //sets up the palette view
-            setPaletteView();
-        }
-        else
-        {
-            //makes sure the previous button is invisible in case it's visible for some reason.
-            buttonPrevious.setVisibility(View.INVISIBLE);
         }
     }
 
     //Displays the next palette in the list
     private void nextPalette()
     {
-        //Buttons are not disabled, only invisible, so we check to see if there is a next item in the list of palettes
-        if (palettes.size() - 1 > currentIndex)
+        //checks if there is a next palette
+        if (paletteViewModel.isNextPalette())
         {
-            //increments the current index
-            currentIndex++;
-            //sets current palette
-            currentPalette = palettes.get(currentIndex);
-            //makes the previous button visible
+            //sets up palette view with the next palette
+            setPaletteView(paletteViewModel.nextPalette());
+            //sets the previous button to visible
             buttonPrevious.setVisibility(View.VISIBLE);
-            //checks to see if there is a next item in the list
-            if (currentIndex == palettes.size()-1)
+            //checks again if there is a next palette. If not, sets the next button to invisible
+            if (!paletteViewModel.isNextPalette())
             {
-                //makes the next button invisible if the current palette is the last item in the list
                 buttonNext.setVisibility(View.INVISIBLE);
             }
-            //sets up the palette view
-            setPaletteView();
-        }
-        else
-        {
-            //makes sure the next button is invisible in case it's visible for some reason.
-            buttonNext.setVisibility(View.INVISIBLE);
         }
     }
 
     //Sets up the view using the current palette.
-    private void setPaletteView()
+    private void setPaletteView(Palette palette)
     {
         //set the current palette to the current index in the list
-        currentPalette = palettes.get(currentIndex);
+        //paletteViewModel.getCurrentPalette() = palettes.get(currentIndex);
         //Occasionally, the palette will somehow be set up with fewer than 5 colors.
         //This isn't supposed to happen from the API, but if several palettes are requested in quick succession, something funky happens.
         //In this event, the palette is scrapped and a new one is retrieved.
         try {
             //set the title text
-            textViewTitle.setText(currentPalette.title);
+            textViewTitle.setText(palette.title);
             //get the colors in the palette from the current palette
-            currentColors = currentPalette.getColors();
+            String[] currentColors = palette.getColors();
 
             //set the background color of the views
             color1.setBackgroundColor(Color.parseColor("#" + currentColors[0]));
@@ -237,11 +203,10 @@ public class MainActivity extends AppCompatActivity {
             color4.setBackgroundColor(Color.parseColor("#" + currentColors[3]));
             color5.setBackgroundColor(Color.parseColor("#" + currentColors[4]));
         }
+        //removes the bad palette from the list and generates a new one
         catch (ArrayIndexOutOfBoundsException ex)
         {
-            //removes palette from list and decrements the index in case something happens. Calls for a new palette to be generated.
-            palettes.remove(currentPalette);
-            currentIndex--;
+            paletteViewModel.removeLastPalette();
             getPaletteAPI();
         }
     }

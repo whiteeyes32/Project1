@@ -18,6 +18,7 @@ public class Palette {
         imageUrl = "";
         userName = "";
         dateCreated = "";
+        colors = new String[]{ "0", "0", "0", "0", "0"};
     }
 
     public String getTitle()
