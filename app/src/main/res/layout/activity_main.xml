@@ -1,117 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginRight="55dp"
-        android:layout_marginBottom="165dp"
-        android:text="Title:"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/textViewTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="192dp"
+        android:layout_gravity="center|top"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginBottom="117dp"
-        android:text="TextView"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonPalettes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="103dp"
+            android:layout_height="63dp"
+            android:layout_marginTop="88dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginRight="55dp"
+            android:layout_marginBottom="165dp"
+            android:gravity="center|top|left"
+            android:text="Title:"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:layout_marginStart="55dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="88dp"
+            android:layout_marginBottom="117dp"
+            android:gravity="center|top|left"
+            android:text="TextView"
+            android:textSize="24sp" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonPalettes"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="136dp"
         android:layout_marginLeft="136dp"
         android:layout_marginTop="116dp"
         android:layout_marginEnd="143dp"
         android:layout_marginRight="143dp"
-        android:text="Get Palette"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+        android:gravity="center|center_horizontal|center_vertical"
+        android:text="Get Palette" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="408dp"
-        android:layout_height="101dp"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
         android:layout_marginEnd="3dp"
         android:layout_marginRight="3dp"
         android:layout_marginBottom="4dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDownload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPalettes">
+        android:orientation="horizontal">
 
         <View
             android:id="@+id/color1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <View
             android:id="@+id/color2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <View
             android:id="@+id/color3"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <View
             android:id="@+id/color4"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <View
             android:id="@+id/color5"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonDownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="153dp"
-        android:layout_marginLeft="153dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="165dp"
-        android:layout_marginRight="165dp"
-        android:layout_marginBottom="176dp"
-        android:text="Download Image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.43"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom|center|center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonPrevious"
+            android:layout_width="123dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="175dp"
+            android:gravity="center|fill_horizontal|left|fill_vertical"
+            android:text="Previous" />
+
+        <Button
+            android:id="@+id/buttonDownload"
+            android:layout_width="124dp"
+            android:layout_height="67dp"
+            android:layout_gravity="center|fill_horizontal|fill_vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginBottom="176dp"
+            android:text="Download Image" />
+
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="78dp"
+            android:layout_height="59dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="175dp"
+            android:gravity="center|fill_horizontal|fill_vertical"
+            android:text="Next" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textViewError"
@@ -123,9 +142,6 @@
         android:layout_marginEnd="176dp"
         android:layout_marginRight="176dp"
         android:layout_marginBottom="272dp"
-        android:textColor="#FF0000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonDownload" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:textColor="#FF0000" />
+
+</LinearLayout>
