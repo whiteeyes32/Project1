@@ -4,11 +4,9 @@ public class Palette {
     // Instance variables are public so GSON can store the values
     // directly in them.
     public String id;
-
     public String title;
     public String imageUrl;
     public String userName;
-    public String dateCreated;
     public String[] colors;
 
     public Palette()
@@ -17,8 +15,7 @@ public class Palette {
         title = "";
         imageUrl = "";
         userName = "";
-        dateCreated = "";
-        colors = new String[]{ "0", "0", "0", "0", "0"};
+        colors = new String[]{ "000000", "0000000", "0000000", "0000000", "0000000"};
     }
 
     public String getTitle()

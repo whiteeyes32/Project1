@@ -72,9 +72,32 @@ public class PaletteViewModel {
     public void removeLastPalette()
     {
         //removes palette from list
-        palettes.remove(currentPalette);
+        palettes.remove(palettes.size()-1);
         //decrements the index
         currentIndex--;
+    }
+
+    //removes the current palette from the list
+    public void deletePalette()
+    {
+        //removes palette
+        palettes.remove(currentPalette);
+        //if this is the last palette in the list, decrement the index.
+        if (currentIndex >= palettes.size())
+        {
+            currentIndex--;
+        }
+        //Kept getting out of bounds errors when the only palette in the list was deleted
+        try
+        {
+            //sets the current palette to the one at the current index
+            currentPalette = palettes.get(currentIndex);
+        }
+        catch (ArrayIndexOutOfBoundsException ex)
+        {
+            //sets the current palette to null if the list is empty.
+            currentPalette = null;
+        }
     }
 
     //returns true if there is a next item in the list. False if not.

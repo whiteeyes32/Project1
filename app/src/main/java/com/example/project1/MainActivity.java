@@ -1,8 +1,13 @@
 package com.example.project1;
 
+import android.app.DownloadManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,12 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
     //declare view elements
     TextView textViewTitle;
-    TextView textViewError;
+    TextView textViewUsername;
 
     Button buttonPalettes;
     Button buttonPrevious;
     Button buttonDownload;
     Button buttonNext;
+    Button buttonDelete;
 
     //blanks views used to display colors
     View color1;
@@ -46,12 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
         //gets view elements
         textViewTitle = findViewById(R.id.textViewTitle);
-        textViewError = findViewById(R.id.textViewError);
+        textViewUsername = findViewById(R.id.textViewUsername);
 
         buttonPalettes = findViewById(R.id.buttonPalettes);
         buttonPrevious = findViewById(R.id.buttonPrevious);
         buttonDownload = findViewById(R.id.buttonDownload);
         buttonNext = findViewById(R.id.buttonNext);
+        buttonDelete = findViewById(R.id.buttonDelete);
 
         color1 = findViewById(R.id.color1);
         color2 = findViewById(R.id.color2);
@@ -87,12 +94,50 @@ public class MainActivity extends AppCompatActivity {
                 downloadPalette();
             }
         });
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //deletes the current palette
+                paletteViewModel.deletePalette();
+                //checks if there is a previous palette available. Sets previous button invisible or visible accordingly
+                if (paletteViewModel.isPreviousPalette())
+                {
+                    buttonPrevious.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    buttonPrevious.setVisibility(View.INVISIBLE);
+                }
+                //checks if there is a previous palette available. Sets previous button invisible or visible accordingly
+                if (paletteViewModel.isNextPalette())
+                {
+                    buttonNext.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    buttonNext.setVisibility(View.INVISIBLE);
+                }
+                //if there are any palettes left, the current palette will not be null
+                if (paletteViewModel.getCurrentPalette() != null) {
+                    //sets the pallete view to the current palette
+                    setPaletteView(paletteViewModel.getCurrentPalette());
+                }
+                //if it is null, clears the view.
+                else
+                {
+                    clearPaletteView();
+                }
+            }
+        });
 
         //sets next and previous buttons to be invisible. We don't need em yet.
         buttonPrevious.setVisibility(View.INVISIBLE);
         buttonNext.setVisibility(View.INVISIBLE);
     }
 
+    //Gets a palette from the API and adds it to the PaletteViewModel's list.
+    //I would have put this in the PaletteViewModel, but in order to to that, PaletteViewModel had to extend the Context class
+    //I tried that. It didn't work. Much simpler and easier to put it here.
     private void getPaletteAPI() {
         // ---- Remember to add the following permission to the AndroidManifest.xml file
         //      <uses-permission android:name="android.permission.INTERNET" />
@@ -142,8 +187,32 @@ public class MainActivity extends AppCompatActivity {
     //downloads an image of the palette
     private void downloadPalette()
     {
+        String url ="";
         //protocol must be HTTPS in order to work on Android
-        String url = paletteViewModel.getCurrentPalette().imageUrl.replace("http", "https");
+        try
+        {
+            url = paletteViewModel.getCurrentPalette().imageUrl.replace("http", "https");
+
+            //Makes sure we have a valid URL set
+            if (url.contains("https")) {
+                //following code obtained from this video: https://youtu.be/KAVn5OrY4Lo
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                String title = URLUtil.guessFileName(url, null, null);
+                request.setTitle(title);
+                request.setDescription("Palette Image Download");
+                String cookie = CookieManager.getInstance().getCookie(url);
+                request.addRequestHeader("cookie", cookie);
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                request.setDestinationInExternalFilesDir(this, Environment.DIRECTORY_PICTURES, title);
+
+                DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                downloadManager.enqueue(request);
+            }
+        }
+        catch (NullPointerException ex)
+        {
+            //Do nothing
+        }
     }
 
     //Displays the previous palette in the list
@@ -193,6 +262,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             //set the title text
             textViewTitle.setText(palette.title);
+            //set username text
+            textViewUsername.setText(palette.userName);
             //get the colors in the palette from the current palette
             String[] currentColors = palette.getColors();
 
@@ -209,5 +280,19 @@ public class MainActivity extends AppCompatActivity {
             paletteViewModel.removeLastPalette();
             getPaletteAPI();
         }
+    }
+    //clears the palette view if there are no palettes.
+    private void clearPaletteView()
+    {
+        //set the title text
+        textViewTitle.setText("");
+        textViewUsername.setText("");
+
+        //set the background color of the views to black
+        color1.setBackgroundColor(Color.parseColor("#000000"));
+        color2.setBackgroundColor(Color.parseColor("#000000"));
+        color3.setBackgroundColor(Color.parseColor("#000000"));
+        color4.setBackgroundColor(Color.parseColor("#000000"));
+        color5.setBackgroundColor(Color.parseColor("#000000"));
     }
 }

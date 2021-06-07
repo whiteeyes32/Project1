@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="192dp"
+        android:layout_height="90dp"
         android:layout_gravity="center|top"
         android:orientation="horizontal">
 
@@ -17,7 +17,6 @@
             android:id="@+id/textView2"
             android:layout_width="103dp"
             android:layout_height="63dp"
-            android:layout_marginTop="88dp"
             android:layout_marginEnd="55dp"
             android:layout_marginRight="55dp"
             android:layout_marginBottom="165dp"
@@ -27,14 +26,38 @@
 
         <TextView
             android:id="@+id/textViewTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="207dp"
             android:layout_height="61dp"
-            android:layout_marginStart="55dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginTop="88dp"
             android:layout_marginBottom="117dp"
+            android:gravity="center|top"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:layout_gravity="top"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="160dp"
+            android:layout_height="73dp"
+            android:layout_marginEnd="55dp"
+            android:layout_marginRight="55dp"
+            android:layout_marginBottom="165dp"
             android:gravity="center|top|left"
-            android:text="TextView"
+            android:text="Author Username:"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textViewUsername"
+            android:layout_width="152dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="117dp"
+            android:gravity="center|top"
             android:textSize="24sp" />
 
     </LinearLayout>
@@ -65,31 +88,36 @@
             android:id="@+id/color1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#000000" />
 
         <View
             android:id="@+id/color2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#000000" />
 
         <View
             android:id="@+id/color3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#000000" />
 
         <View
             android:id="@+id/color4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#000000" />
 
         <View
             android:id="@+id/color5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="#000000" />
     </LinearLayout>
 
     <LinearLayout
@@ -120,7 +148,7 @@
             android:layout_marginEnd="14dp"
             android:layout_marginRight="14dp"
             android:layout_marginBottom="176dp"
-            android:text="Download Image" />
+            android:text="Download Palette" />
 
         <Button
             android:id="@+id/buttonNext"
@@ -132,16 +160,10 @@
             android:text="Next" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewError"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="178dp"
-        android:layout_marginLeft="178dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="176dp"
-        android:layout_marginRight="176dp"
-        android:layout_marginBottom="272dp"
-        android:textColor="#FF0000" />
+        android:text="Delete Palette" />
 
 </LinearLayout>
